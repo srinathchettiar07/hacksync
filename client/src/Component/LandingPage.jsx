@@ -53,24 +53,24 @@ const LandingPage = () => {
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <div className="h-8 w-8 bg-[#1E3A8A] rounded-md flex items-center justify-center text-white font-bold mr-2">
+                <div className="h-8 w-8 bg-[#8a1e1e] rounded-md flex items-center justify-center text-white font-bold mr-2">
                   C
                 </div>
                 <Link to={"/staff/login"}>
-                <span className="font-bold text-xl text-[#1E3A8A]">CivicConnect</span>
+                <span className="font-bold text-xl text-[#8a1e1e]">CivicConnect</span>
                 </Link>
               </div>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-700 hover:text-[#1E3A8A] font-medium">Features</a>
-              <a href="#how-it-works" className="text-gray-700 hover:text-[#1E3A8A] font-medium">How It Works</a>
-              <a href="#technology" className="text-gray-700 hover:text-[#1E3A8A] font-medium">Technology</a>
+              <a href="#features" className="text-gray-700 hover:text-[#8a1e1e] font-medium">Features</a>
+              <a href="#how-it-works" className="text-gray-700 hover:text-[#8a1e1e] font-medium">How It Works</a>
+              <a href="#technology" className="text-gray-700 hover:text-[#8a1e1e] font-medium">Technology</a>
               <div className="flex space-x-4">
-                <Link to="/citizen/login" className="px-4 py-2 rounded-lg text-[#1E3A8A] font-medium hover:bg-blue-50 transition">
+                <Link to="/citizen/login" className="px-4 py-2 rounded-lg text-[#8a1e1e] font-medium hover:bg-blue-50 transition">
                   Log in
                 </Link>
-                <Link to="/citizen/signup" className="px-4 py-2 bg-[#1E3A8A] rounded-lg text-white font-medium hover:bg-[#233876] transition">
+                <Link to="/citizen/signup" className="px-4 py-2 bg-[#8a1e1e] rounded-lg text-white font-medium hover:bg-[#233876] transition">
                   Sign Up
                 </Link>
               </div>
@@ -95,10 +95,10 @@ const LandingPage = () => {
               <a href="#how-it-works" className="px-3 py-2 rounded-md text-gray-700 font-medium" onClick={() => setIsMenuOpen(false)}>How It Works</a>
               <a href="#technology" className="px-3 py-2 rounded-md text-gray-700 font-medium" onClick={() => setIsMenuOpen(false)}>Technology</a>
               <div className="pt-2 border-t border-gray-200 flex flex-col space-y-3">
-                <Link to="/citizen/login" className="px-3 py-2 rounded-md text-[#1E3A8A] font-medium text-center" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/citizen/login" className="px-3 py-2 rounded-md text-[#8a1e1e] font-medium text-center" onClick={() => setIsMenuOpen(false)}>
                   Log in
                 </Link>
-                <Link to="/citizen/signup" className="px-3 py-2 bg-[#1E3A8A] rounded-md text-white font-medium text-center" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/citizen/signup" className="px-3 py-2 bg-[#8a1e1e] rounded-md text-white font-medium text-center" onClick={() => setIsMenuOpen(false)}>
                   Sign Up
                 </Link>
               </div>
@@ -113,13 +113,13 @@ const LandingPage = () => {
           <div className="flex flex-col lg:flex-row items-center">
             <div className="lg:w-1/2 observe">
               <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
-                Bridging the Gap Between <span className="text-[#1E3A8A]">Citizens and Municipalities</span>
+                Bridging the Gap Between <span className="text-[#8a1e1e]">Citizens and Municipalities</span>
               </h1>
               <p className="mt-6 text-xl text-gray-600">
                 A real-time issue reporting and management platform that empowers communities and streamlines public works.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                <Link to="/citizen/signup" className="px-6 py-3 bg-[#1E3A8A] rounded-xl text-white font-medium hover:bg-[#233876] transition flex items-center justify-center">
+                <Link to="/citizen/signup" className="px-6 py-3 bg-[#8a1e1e] rounded-xl text-white font-medium hover:bg-[#233876] transition flex items-center justify-center">
                   Get Started
                   <ChevronRight size={20} className="ml-1" />
                 </Link>
@@ -158,22 +158,22 @@ const LandingPage = () => {
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                icon: <Send size={32} className="text-[#1E3A8A]" />,
+                icon: <Send size={32} className="text-[#8a1e1e]" />,
                 title: "Inefficient Reporting",
                 description: "Citizens don't know how or where to report problems, leading to unresolved issues."
               },
               {
-                icon: <Clock size={32} className="text-[#1E3A8A]" />,
+                icon: <Clock size={32} className="text-[#8a1e1e]" />,
                 title: "Slow Response Times",
                 description: "Issues get lost in bureaucratic red tape, taking weeks or months to resolve."
               },
               {
-                icon: <AlertCircle size={32} className="text-[#1E3A8A]" />,
+                icon: <AlertCircle size={32} className="text-[#8a1e1e]" />,
                 title: "Lack of Transparency",
                 description: "No way for citizens to track their complaints or see municipal progress."
               },
               {
-                icon: <BarChart3 size={32} className="text-[#1E3A8A]" />,
+                icon: <BarChart3 size={32} className="text-[#8a1e1e]" />,
                 title: "Poor Prioritization",
                 description: "Municipalities struggle to identify critical areas that need immediate attention."
               }
@@ -222,7 +222,7 @@ const LandingPage = () => {
               }
             ].map((item, index) => (
               <div key={index} className="relative observe">
-                <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#1E3A8A] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#8a1e1e] rounded-full flex items-center justify-center text-white font-bold text-lg">
                   {item.step}
                 </div>
                 <div className="pt-8 pb-6 px-6 bg-white rounded-2xl shadow-sm border border-gray-200 h-full">
@@ -246,13 +246,13 @@ const LandingPage = () => {
           <div className="mt-12">
             <div className="flex justify-center border-b border-gray-200">
               <button
-                className={`px-6 py-3 font-medium border-b-2 ${activeFeatureTab === 'citizen' ? 'border-[#1E3A8A] text-[#1E3A8A]' : 'border-transparent text-gray-500'}`}
+                className={`px-6 py-3 font-medium border-b-2 ${activeFeatureTab === 'citizen' ? 'border-[#8a1e1e] text-[#8a1e1e]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveFeatureTab('citizen')}
               >
                 For Citizens
               </button>
               <button
-                className={`px-6 py-3 font-medium border-b-2 ${activeFeatureTab === 'municipality' ? 'border-[#1E3A8A] text-[#1E3A8A]' : 'border-transparent text-gray-500'}`}
+                className={`px-6 py-3 font-medium border-b-2 ${activeFeatureTab === 'municipality' ? 'border-[#8a1e1e] text-[#8a1e1e]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveFeatureTab('municipality')}
               >
                 For Municipalities
@@ -264,22 +264,22 @@ const LandingPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 observe">
                   {[
                     {
-                      icon: <Smartphone size={24} className="text-[#1E3A8A]" />,
+                      icon: <Smartphone size={24} className="text-[#8a1e1e]" />,
                       title: "Intuitive Mobile-First Design",
                       description: "Easy-to-use interface that works seamlessly on any smartphone."
                     },
                     {
-                      icon: <Send size={24} className="text-[#1E3A8A]" />,
+                      icon: <Send size={24} className="text-[#8a1e1e]" />,
                       title: "One-Tap Reporting with Media Upload",
                       description: "Report issues in seconds with photos, audio, and automatic location tagging."
                     },
                     {
-                      icon: <MapPin size={24} className="text-[#1E3A8A]" />,
+                      icon: <MapPin size={24} className="text-[#8a1e1e]" />,
                       title: "Real-Time Complaint Tracking",
                       description: "Follow your report's journey from submission to resolution on an interactive map."
                     },
                     {
-                      icon: <CheckCircle size={24} className="text-[#1E3A8A]" />,
+                      icon: <CheckCircle size={24} className="text-[#8a1e1e]" />,
                       title: "Status Notifications",
                       description: "Get instant SMS or push notifications at every stage of your report's progress."
                     }
@@ -301,22 +301,22 @@ const LandingPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 observe">
                   {[
                     {
-                      icon: <BarChart3 size={24} className="text-[#1E3A8A]" />,
+                      icon: <BarChart3 size={24} className="text-[#8a1e1e]" />,
                       title: "Smart Automated Ticketing & Routing",
                       description: "AI-powered categorization and routing of issues to the correct department."
                     },
                     {
-                      icon: <MapPin size={24} className="text-[#1E3A8A]" />,
+                      icon: <MapPin size={24} className="text-[#8a1e1e]" />,
                       title: "Centralized Admin Dashboard with Live Map",
                       description: "Visualize all city issues on an interactive map with filtering capabilities."
                     },
                     {
-                      icon: <AlertCircle size={24} className="text-[#1E3A8A]" />,
+                      icon: <AlertCircle size={24} className="text-[#8a1e1e]" />,
                       title: "Priority-Based Task Assignment",
                       description: "Automatically prioritize issues based on severity, location, and citizen reports."
                     },
                     {
-                      icon: <TrendingUp size={24} className="text-[#1E3A8A]" />,
+                      icon: <TrendingUp size={24} className="text-[#8a1e1e]" />,
                       title: "Powerful Analytics & Reporting Tools",
                       description: "Gain insights into response times, resolution rates, and common issue types."
                     }
@@ -376,12 +376,12 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#1E3A8A] px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-[#8a1e1e] px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white">Ready to Transform Your Community?</h2>
           <p className="mt-4 text-xl text-blue-100">Join CivicConnect today and be part of the change</p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <Link to="/citizen/signup" className="px-6 py-3 bg-white rounded-xl text-[#1E3A8A] font-medium hover:bg-gray-100 transition">
+            <Link to="/citizen/signup" className="px-6 py-3 bg-white rounded-xl text-[#8a1e1e] font-medium hover:bg-gray-100 transition">
               Sign Up as Citizen
             </Link>
             <button className="px-6 py-3 border border-white rounded-xl text-white font-medium hover:bg-blue-900 transition">
@@ -397,7 +397,7 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center">
-                <div className="h-8 w-8 bg-[#1E3A8A] rounded-md flex items-center justify-center text-white font-bold mr-2">
+                <div className="h-8 w-8 bg-[#8a1e1e] rounded-md flex items-center justify-center text-white font-bold mr-2">
                   C
                 </div>
                 <span className="font-bold text-xl text-white">CivicConnect</span>

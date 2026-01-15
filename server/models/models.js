@@ -38,6 +38,79 @@ const staffSchema = new mongoose.Schema({
     maxWorkload: { type: Number, default: 5 }
 }, { timestamps: true });
 
+
+
+const reportMetadataSchema = new mongoose.Schema(
+  {
+    project_name: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true
+    },
+
+    budget: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    construction_details: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    department: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true
+    },
+
+    timeline: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    location: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true
+    },
+
+    contractor: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true
+    },
+
+    status: {
+      type: String,
+      required: true,
+    },
+
+    gps_coordinates: {
+      type: String,
+      trim: true
+      // Example: "19.4550, 72.8111"
+    },
+
+    additional_info: {
+      type: String,
+      trim: true
+    }
+  },
+  {
+    timestamps: true
+  }
+);
+
+
+
 const complaintSchema = new mongoose.Schema({
     citizenId: { type: mongoose.Schema.Types.ObjectId, ref: "Citizen", required: true },
     category: {
@@ -173,7 +246,7 @@ const ComplaintImage = mongoose.model("ComplaintImage", complaintImageSchema);
 
 const ComplaintComment = mongoose.model("ComplaintComment", complaintCommentSchema);
 const ComplaintUpvote = mongoose.model("ComplaintUpvote", complaintUpvoteSchema);
-
+const Contract =  mongoose.model("ReportMetadata", reportMetadataSchema);
 
 // Index for better performance
 messageSchema.index({ room: 1, createdAt: -1 });
@@ -194,6 +267,7 @@ export {
     ComplaintUpvote,
     OTP,
     Message,
-    Notification
+    Notification,
+    Contract
 };
 

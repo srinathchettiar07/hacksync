@@ -12,7 +12,8 @@ import {
   ClipboardList,
   AlertCircle,
   MapPin,
-  HelpCircle
+  HelpCircle,
+  FileSearch
 } from "lucide-react";
 import { UserContext } from "../../Context/userContext";
 
@@ -34,7 +35,8 @@ const CitizenLayout = () => {
     { id: "dashboard", path: "/citizen/portal/dashboard", label: "Dashboard", icon: Home },
     { id: "file-complaint", path: "/citizen/portal/file-a-complain", label: "File a Complaint", icon: PlusCircle },
     { id: "posts", path: "/citizen/portal/posts", label: "See All Complaints", icon: ClipboardList },
-    { id: "chatroom", path: "/citizen/portal/chat", label: "Chat Room", icon: ClipboardList}
+    { id: "chatroom", path: "/citizen/portal/chat", label: "Chat Room", icon: ClipboardList},
+    { id: "document-analysis", path: "/citizen/portal/document-analysis", label: "Document Analysis", icon: FileSearch}
   ];
 
   return (

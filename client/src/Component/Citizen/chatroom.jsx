@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router';
 import { 
   Send, 
   Users, 
@@ -14,8 +15,11 @@ import {
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import DOMPurify from 'dompurify';
+import { UserContext } from '../../Context/userContext';
 
-const CitizenChat = ({ citizen, token, onClose }) => {
+const CitizenChat = () => {
+  const { user, token } = useContext(UserContext);
+  const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -38,10 +42,19 @@ const CitizenChat = ({ citizen, token, onClose }) => {
 
   // Initialize socket connection and load messages
   useEffect(() => {
+    // Check if user and token are available
+    if (!user || !token) {
+      console.error('User or token not available');
+      setIsLoading(false);
+      toast.error('Please login to access chat');
+      navigate('/citizen/login');
+      return;
+    }
+
     const initializeChat = async () => {
       try {
         // Load previous messages
-        const response = await fetch('http://localhost:3000/messages?limit=50', {
+        const response = await fetch('http://localhost:3000/citizen/messages?limit=50', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -49,12 +62,16 @@ const CitizenChat = ({ citizen, token, onClose }) => {
         
         if (response.ok) {
           const data = await response.json();
-          if (data.success) {
+          if (data.success && data.messages) {
             setMessages(data.messages);
           }
+        } else {
+          console.warn('Failed to load messages:', response.status);
+          // Continue even if messages fail to load
         }
       } catch (error) {
         console.error('Failed to load messages:', error);
+        // Continue even if messages fail to load
       } finally {
         setIsLoading(false);
       }
@@ -63,17 +80,26 @@ const CitizenChat = ({ citizen, token, onClose }) => {
       const newSocket = io('http://localhost:3000', {
         auth: {
           token: token
-        }
+        },
+        transports: ['websocket', 'polling']
       });
 
       newSocket.on('connect', () => {
+        console.log('Socket connected');
         setIsConnected(true);
-        toast.success('Connected to chat');
+        toast.success('Connected to chat', { duration: 2000 });
       });
 
       newSocket.on('disconnect', () => {
+        console.log('Socket disconnected');
         setIsConnected(false);
-        toast.error('Disconnected from chat');
+        toast.error('Disconnected from chat', { duration: 2000 });
+      });
+
+      newSocket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error);
+        setIsConnected(false);
+        toast.error('Failed to connect to chat server', { duration: 3000 });
       });
 
       newSocket.on('new-message', (message) => {
@@ -117,11 +143,15 @@ const CitizenChat = ({ citizen, token, onClose }) => {
 
       setSocket(newSocket);
 
-      return () => newSocket.close();
+      return () => {
+        if (newSocket) {
+          newSocket.close();
+        }
+      };
     };
 
     initializeChat();
-  }, [token]);
+  }, [token, user, navigate]);
 
   const handleSendMessage = () => {
     const sanitizedMessage = DOMPurify.sanitize(newMessage.trim());
@@ -155,6 +185,22 @@ const CitizenChat = ({ citizen, token, onClose }) => {
     });
   };
 
+  if (!user || !token) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Please login to access chat</p>
+          <button
+            onClick={() => navigate('/citizen/login')}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -170,7 +216,7 @@ const CitizenChat = ({ citizen, token, onClose }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button 
-              onClick={onClose}
+              onClick={() => navigate('/citizen/portal/dashboard')}
               className="md:hidden p-1 rounded-lg hover:bg-gray-100"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -216,11 +262,13 @@ const CitizenChat = ({ citizen, token, onClose }) => {
                 <p>No messages yet. Start the conversation!</p>
               </div>
             ) : (
-              messages.map((message) => (
+              messages.map((message, index) => (
                 <MessageItem 
-                  key={message._id} 
+                  key={message._id || message.id || `msg-${index}`} 
                   message={message} 
-                  isOwn={message.sender === citizen._id} 
+                  isOwn={message.sender?.toString() === user?._id?.toString() || 
+                         message.sender === user?._id?.toString() ||
+                         message.senderId === user?._id?.toString()} 
                 />
               ))
             )}
@@ -327,7 +375,9 @@ const MessageItem = ({ message, isOwn }) => {
           : 'bg-white text-gray-900 rounded-bl-none'
       }`}>
         {!isOwn && (
-          <div className="text-sm font-medium mb-1">{message.senderName}</div>
+          <div className="text-sm font-medium mb-1">
+            {message.senderName || message.sender?.displayName || 'Unknown User'}
+          </div>
         )}
         <div className="text-sm">{message.content}</div>
         <div className={`text-xs mt-1 ${isOwn ? 'text-blue-200' : 'text-gray-500'}`}>

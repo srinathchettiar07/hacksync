@@ -1,8 +1,9 @@
 // adminRoute.js
 import express from "express";
-import { Complaint, Department, Staff, Citizen, ComplaintUpvote } from "../../models/models.js";
+import { Complaint, Department, Staff, Citizen, ComplaintUpvote, ComplaintImage, ComplaintComment, Contract } from "../../models/models.js";
 import {addDepartment ,getAllWorkers, getAllDepartments, getStaffCountByDepartment, updateWorkerStatus, getAllStaffWithDetails} from "../../controllers/admincontroller.js";
 import { get } from "mongoose";
+import pdfUpload from "../../Middlewares/pdfUpload.js";
 
 const adminRoute = express.Router();
 
@@ -191,11 +192,6 @@ adminRoute.get("/map", async (req, res) => {
   }
 });
 
-
-
-
-
-
 //Srinath
 
 adminRoute.post("/add-department", addDepartment);
@@ -203,4 +199,180 @@ adminRoute.get("/workers", getAllStaffWithDetails);
 adminRoute.get("/departments",getAllDepartments);
 adminRoute.get("/department/:departmentId/count", getStaffCountByDepartment);
 adminRoute.patch("/workers/:workerId/status", updateWorkerStatus);
+
+// Get individual complaint details for admin
+adminRoute.get("/complaint/:complaintId", async (req, res) => {
+  try {
+    const { complaintId } = req.params;
+
+    // Find complaint with populated citizen info
+    const complaint = await Complaint.findById(complaintId)
+      .populate('citizenId', 'displayName profilePicture')
+      .populate('assignedDepartmentId', 'name');
+
+    if (!complaint) {
+      return res.status(404).json({ success: false, message: "Complaint not found" });
+    }
+
+    // Fetch images
+    const images = await ComplaintImage.find({ complaintId }).select('imageUrl');
+
+    // Fetch comments with user info
+    const comments = await ComplaintComment.find({ complaintId })
+      .populate('citizenId', 'displayName')
+      .sort({ createdAt: -1 })
+      .select('comment createdAt citizenId')
+      .lean();
+
+    const formattedComments = comments.map(c => ({
+      _id: c._id,
+      user: c.citizenId?.displayName || 'Unknown',
+      text: c.comment,
+      createdAt: c.createdAt
+    }));
+
+    // Count upvotes
+    const totalUpvotes = await ComplaintUpvote.countDocuments({ complaintId });
+
+    // Analysis data
+    const totalImages = images.length;
+    const totalComments = comments.length;
+    const createdAt = new Date(complaint.createdAt);
+    const now = new Date();
+    const ageInDays = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
+
+    // Comment activity (last 7 days for simplicity)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const recentComments = await ComplaintComment.find({
+      complaintId,
+      createdAt: { $gte: sevenDaysAgo }
+    }).sort({ createdAt: 1 });
+
+    const commentActivity = {
+      labels: [],
+      counts: []
+    };
+
+    // Simple activity: count comments per day
+    const activityMap = {};
+    recentComments.forEach(comment => {
+      const date = comment.createdAt.toISOString().split('T')[0];
+      activityMap[date] = (activityMap[date] || 0) + 1;
+    });
+
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      commentActivity.labels.push(dateStr);
+      commentActivity.counts.push(activityMap[dateStr] || 0);
+    }
+
+    const analysis = {
+      totalImages,
+      totalComments,
+      totalUpvotes,
+      ageInDays,
+      commentActivity
+    };
+
+    res.status(200).json({
+      success: true,
+      data: {
+        complaint: {
+          _id: complaint._id,
+          category: complaint.category,
+          description: complaint.description,
+          address: complaint.address,
+          locationLat: complaint.locationLat,
+          locationLong: complaint.locationLong,
+          status: complaint.status,
+          priority: complaint.priority,
+          createdAt: complaint.createdAt,
+          updatedAt: complaint.updatedAt,
+          user: {
+            name: complaint.citizenId?.displayName || 'Citizen',
+            avatar: complaint.citizenId?.profilePicture
+          },
+          assignedDepartment: complaint.assignedDepartmentId?.name
+        },
+        images: images.map(img => ({ imageUrl: img.imageUrl })),
+        comments: formattedComments,
+        analysis
+      }
+    });
+
+  } catch (error) {
+    console.error("Error fetching complaint details:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch complaint details",
+      error: error.message
+    });
+  }
+});
+
+adminRoute.post("/save-report-metadata", async (req, res) => {
+  try {
+    console.log("Save report metadata called");
+    console.log("Request body:", req.body);
+    console.log("Request user:", req.user);
+    console.log("Request type:", req.type);
+
+    const {
+      project_name,
+      budget,
+      construction_details,
+      department,
+      timeline,
+      location,
+      contractor,
+      status,
+      gps_coordinates,
+      additional_info
+    } = req.body;
+
+    // Get admin ID from token (assuming req.user is set by auth middleware)
+    const adminId = req.user;
+
+    const existingReport = await Contract.findOne({ project_name });
+    if (existingReport) {
+      return res.status(400).json({
+        success: false,
+        message: "Report with this project name already exists"
+      });
+    }
+    // Create new report metadata entry
+    const newReport = new Contract({
+      project_name,
+      budget,
+      construction_details,
+      department,
+      timeline,
+      location,
+      contractor,
+      status: status || "Active",
+      gps_coordinates,
+      additional_info
+    });
+
+    await newReport.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Report metadata saved successfully",
+      data: newReport
+    });
+
+  } catch (error) {
+    console.error("Error saving report metadata:", error);
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
+
 export default adminRoute;
+

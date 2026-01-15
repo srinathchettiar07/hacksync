@@ -41,6 +41,7 @@ const AdminLayout = () => {
     { id: "map", path: "/admin/map", label: "Map", icon: MapIcon },
     { id: "department", path: "/admin/add-department", label: "Create Department", icon: FolderPlus },
     { id: "departments", path: "/admin/department", label: "Departments", icon: BookDown },
+    {id: "reports", path:"/admin/reports", label:"Add Reports", icon: FileText},
   ];
 
   return (
