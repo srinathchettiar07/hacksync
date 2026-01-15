@@ -12,6 +12,7 @@ import CitizenDashboard from "./Component/Citizen/CitizenDashBoard";
 import ComplaintDetail from "./Component/Citizen/ComplaintDetails";
 import Posts from "./Component/Citizen/Posts";
 import CitizenChat from "./Component/Citizen/chatroom";
+import DocumentAnalysis from "./Component/Citizen/DocumentAnalysis";
 
 import AdminLayout from "./Component/Staff/Admin/AdminLayout";
 import AdminDashboard from "./Component/Staff/Admin/AdminDashBoard";
@@ -50,6 +51,7 @@ function App() {
           <Route path="posts" element={<Posts/>} />
           <Route path=":complaintId" element={<ComplaintDetail/>} />
           <Route path="chat" element={<CitizenChat />} />
+          <Route path="document-analysis" element={<DocumentAnalysis />} />
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
