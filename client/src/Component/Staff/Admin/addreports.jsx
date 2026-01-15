@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import { 
   Upload, 
   FileText, 
@@ -29,7 +31,10 @@ const AdminReports = () => {
   const fileInputRef = useRef(null);
   const [error, setError] = useState(null);
 
-  // Handle drag and drop events
+  // Handle drag and drop 
+  // events
+
+  const navigate = useNavigate();
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragOver(true);
@@ -103,9 +108,11 @@ const AdminReports = () => {
 
             if (response.data.success) {
                 toast.success("Metadata saved successfully!");
+                navigate("/admin/view-reports");
             } else {
                 toast.error("Failed to save metadata");
             }
+
     }
     catch (err) {
         console.error("Error saving metadata:", err);

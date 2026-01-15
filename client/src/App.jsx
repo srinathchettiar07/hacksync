@@ -22,6 +22,8 @@ import DepartmentDashboard from "./Component/Staff/Admin/DepartmentDashboard";
 import WorkerManagement from "./Component/Staff/Admin/WorkerManagement";
 import Complain from "./Component/Staff/Admin/Complain";
 
+import ViewReports from "./Component/Staff/Admin/ViewReports";
+
 
 function App() {
   return (
@@ -66,6 +68,7 @@ function App() {
           <Route path="department" element={<DepartmentManagement/>}/>
           <Route path="complaint/:complaintId" element={<Complain/>}/>
           <Route path="reports" element={<Addreports/>}/>
+          <Route path="view-reports" element={<ViewReports />} />
         </Route>
 
 

@@ -368,11 +368,32 @@ adminRoute.post("/save-report-metadata", async (req, res) => {
   } catch (error) {
     console.error("Error saving report metadata:", error);
     res.status(500).json({
-      error: error.message
+      error: error.message,
+      success: false,
+      message: "Failed to save report metadata"
     });
   }
 });
 
+adminRoute.get("/reports", async (req, res) => {
+  try {
+    console.log("Fetching all reports");
+    const reports = await Contract.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: reports.length,
+      data: reports
+    });
+
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch reports"
+    });
+  }
+});
 
 export default adminRoute;
 

@@ -42,6 +42,7 @@ const AdminLayout = () => {
     { id: "department", path: "/admin/add-department", label: "Create Department", icon: FolderPlus },
     { id: "departments", path: "/admin/department", label: "Departments", icon: BookDown },
     {id: "reports", path:"/admin/reports", label:"Add Reports", icon: FileText},
+    {id: "view-reports", path:"/admin/view-reports", label:"View Reports", icon: FileText},
   ];
 
   return (
